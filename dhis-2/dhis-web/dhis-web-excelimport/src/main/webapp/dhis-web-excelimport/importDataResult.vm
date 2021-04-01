@@ -1,0 +1,6 @@
+<input type="button" value="Back" onclick="window.location.href='importForm.action'" />
+<br/><br/>
+<span id="message" style="display:block">$message</span>
+<span id="totalCount" style="display:block">$totalCount</span>
+<span id="addingCount" style="display:block">$addingCount</span>
+<span id="updatingCount" style="display:block">$updatingCount</span>

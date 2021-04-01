@@ -1,0 +1,152 @@
+
+<script>
+
+    function formValidations()
+    {                       
+        var period = document.exportDataForm.year.value;
+        var orgUnitGroupId = document.exportDataForm.orgUnitGroupId.value;
+       var buttnval = document.exportDataForm.complete.value;
+                                                        
+        if(period=="NA" && orgUnitGroupId=="NA")
+		{
+		alert ("Please Select Value");
+		return false;
+		}
+        else if(period=="NA")
+		{
+		alert ("Please Select Period");
+		return false;
+		}
+		else if(orgUnitGroupId=="NA")
+		{
+		alert ("Please Organization Unit Group");
+		 return false;
+		}
+		
+		else
+		{
+		 document.forms['exportDataForm'].submit();
+		}
+   }
+
+    jQuery(document).ready(
+            function()
+            {
+                jQuery("#exportDataForm").validate({
+                      meta:"validate"
+                    ,errorElement:"td"
+                    ,submitHandler: function(form)
+                                    {
+                                        formValidations();
+										}
+                });
+                jQuery("#name").focus();
+            }
+    );
+
+/*function getme(){
+var e = document.getElementById("year");
+var strUser = e.options[e.selectedIndex].value;
+console.log(strUser);
+}
+
+
+
+
+function checkvalue()
+{
+var period=document.getElementById("year").value;
+var org=document.getElementById("orgUnitGroupId").value;
+
+if(period=="NA")
+{
+alert ("Please Select Period");
+return false;
+}
+else if(org=="NA")
+{
+alert ("Please Organization Unit Group");
+return false;
+}
+else if(period=="NA" && org=="NA")
+{
+alert ("Please Select Value");
+return false;
+}
+
+}
+*/
+</script>
+
+<h1>$i18n.getString( "export_form" )</h1>
+<hr /><br />
+            
+<form id="exportDataForm" name="exportDataForm" action="exportDataResult.action" method="post" target="_blank">
+    <table align="center" style=" border-collapse: collapse; margin-top: 0;" cellpadding="0" cellspacing="0" width="730" border=0>
+        <tr>
+            <td class="NormalB">
+                <label for="startDate">$i18n.getString( 'Period' ) </label><br/>
+    				<select id="year" name="year"  style="width:220px"  >
+                        <option value="NA">[ Select Year ]</option>
+                        #foreach ( $year in $yearList )
+                            <option value="$year">$year</option>
+                        #end
+                    </select>
+					
+					
+					
+						
+            </td>
+			<td>&nbsp;</td>
+			<td class="NormalB">
+                <label for="startDate">$i18n.getString( 'Organization Unit Group' ) </label><br/>
+    				<select id="orgUnitGroupId" name="orgUnitGroupId"  style="width:220px" >
+                        <option value="NA">[ Select orgUnitGroup ]</option>
+                        #foreach ( $organisationUnitGroup in $organisationUnitGroups )
+                            <option value="$organisationUnitGroup.uid">$organisationUnitGroup.name</option>
+						#end
+						<option value="ALL">ALL</option>
+                    </select>
+					
+					
+					
+						
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>           
+        <tr>
+			<td class="NormalB">
+                <!--<input type="submit" name="complete" id="complete" style="width:200px" value="$i18n.getString( 'Complete' )"/>-->
+				<input type="submit" id="complete" name="complete" onclick="checkvalue()"  value="$i18n.getString( 'Export' )" style="width:8em" />&nbsp;&nbsp;
+			</td>		
+            <td>&nbsp;</td>
+        </tr>
+
+        <tr>
+			<td class="NormalB">
+                <!--<input type="submit" name="delete" id="delete" style="width:200px" value="$i18n.getString( 'Delete' )"/>-->
+			</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="NormalB">&nbsp;</td>
+            <td class="NormalB">
+                <input type="hidden" name="organisationUnitUid" id="organisationUnitUid" />
+				<input type="hidden" id="dataSetCompleteRegistration" name="dataSetCompleteRegistration"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript"> 
+    jQuery( function(){
+            datePickerInRange( "startDate", "endDate", false, false );
+    });     
+</script>

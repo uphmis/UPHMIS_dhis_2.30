@@ -1,0 +1,5 @@
+<!--  add disableURLRewriting="true" for security related to disable url -->
+<Context disableURLRewriting="true">
+  <!-- don't persist sessions across tomcat restarts -->
+  <Manager pathname="" />
+</Context>

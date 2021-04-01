@@ -1,0 +1,683 @@
+
+
+<h1>Upload Data</h1>
+<hr /><br />
+    
+<form id="reportForm" name="reportForm" method="post" enctype="multipart/form-data" action="importDataResult.action">
+    <input type="hidden" id="curLocaleCode" value="$locale.getLanguage()_$locale.getCountry()"/>
+    <table style=" border-collapse: collapse; margin-top: 0;" cellpadding="0" cellspacing="0" width="730" border=0>
+         <tr style="display:none">
+            <td class="NormalB">
+                PeriodType : <br />
+                <select id="periodTypeId" name="periodTypeId" style="width:200px">
+                    <option value="Weekly">Weekly</option>
+                </select>
+            </td>
+			<td>&nbsp;</td>
+        </tr>       
+        <tr>
+            <td class="NormalB">
+                 Upload Data : <br/><br/>
+                <input type="file" id="upload" name="upload" size="31" class="{validate:{required:true}}">
+            </td>			
+			<td>&nbsp;</td>
+            <td class="NormalB">
+				 <div id="weekly" style="display:none">
+				 <div class="selectionLabel">$i18n.getString( "Weekly Period" )<br/><br/></div>
+				  <select id="selectMonths" name="selectMonths" style="width:100px" onchange="changeMonth()">
+					<option value='01'> January</option>
+					<option value='02'> February </option>
+					<option value='03'> March </option>
+					<option value='04'> April </option>
+					<option value='05'> May </option>
+					<option value='06'> June </option>
+					<option value='07'> July </option>
+					<option value='08'> August </option>
+					<option value='09'> September </option>
+					<option value='10'> October </option>
+					<option value='11'> November </option>
+					<option value='12'> December </option>
+				  </select>
+				  <select id="selectedPeriodId" name="selectedPeriodId" class="{validate:{required:true}}" style="width:200px" onchange="verifyPeriod()" style="display:none">
+				  </select>
+				  <div style="display:none" >
+					  <select id="selectedYear" name="selectedYear" style="width:150px" onchange="cpreviousYear()">
+						<!--<option value="NA">[ Select Year ]</option>-->
+						#foreach ( $year in $yearList )
+							<option value="$year">$year</option>
+						#end
+					 </select>
+				 </div> 
+				  <input type="button" id="prevButton" style="width:85px" value="Prev Year" title="$i18n.getString('earlier_periods')" onclick="cpreviousYear()">
+				  <!--
+				  <input type="button" id="nextButton2" style="width:85px" value="Next Year" title="$i18n.getString('later_periods')" disabled="disabled" onclick="cnextYear()">
+				  -->
+				  
+				</div>
+
+            </td>
+			<td>&nbsp;</td>
+ 
+			<td>&nbsp;</td>
+
+       	</tr>
+       	</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr> 	
+		
+        <tr>
+           
+			<td class="NormalB">
+                <input type="submit" name="importReport" value='Import Data' style="width:180px">
+            </td>
+        </tr>                 
+       
+       
+    </table>
+</form>
+
+<script>
+//-----------------------------------------------------------------------
+//init jQuery validation for reportForm
+//-----------------------------------------------------------------------
+jQuery(document).ready(
+	//changeMonth();	
+	function()
+	{	
+		jQuery("#reportForm").validate({
+			 meta:"validate"
+			,errorElement:"td"
+			,submitHandler: function(form)
+			{
+				//alert( formValidations() );					
+				if( formValidations() )
+				{
+					submitImportForm();
+				}
+			}
+		});
+		jQuery("#name").focus();
+	}
+);
+
+function formValidations()
+{
+	var weeklyPeriodObject = document.getElementById('selectedPeriodId');
+    var weeklyPeriodValue = weeklyPeriodObject.options[weeklyPeriodObject.selectedIndex].value;
+	
+	var monthPeriodObject = document.getElementById('selectMonths');
+    var monthPeriodValue = monthPeriodObject.options[monthPeriodObject.selectedIndex].value;
+	
+	if( weeklyPeriodValue == "-1" || weeklyPeriodValue == null || weeklyPeriodValue == "" ) 
+	{
+		alert("Please Select Weekly Period"); 
+		return false;
+	}
+	
+	if( monthPeriodValue == "" || monthPeriodValue == "" ) 
+	{
+		alert("Please Select Month"); 
+		return false;
+	}
+	
+	return true;
+}
+
+</script>
+<!-- add for IPPF - weekly Period Load Month wise in dataEntry screen -->
+<script type="text/javascript">
+  var selMonth=new Date().getMonth()+1;
+  //alert( " 1 -- " + selMonth );
+  //changeMonth();
+  var selYear=new Date().getFullYear();
+  var yearDiff=0;
+ //alert(yearDiff);
+  var yr = new Date().getFullYear();
+  var today = new Date();
+   
+ 
+  //$(document).ready(function(){
+   //alert( " 2 " + periodType );
+	document.getElementById('weekly').style.display="block";
+	/*
+	document.getElementById('otherPeriods').style.display = "none";
+
+	if(document.getElementsByClassName('otherPeriods')[0])
+	{
+		document.getElementsByClassName('otherPeriods')[0].id="sample";
+	}
+	*/
+	
+	/*
+	if(document.getElementsByClassName('weeklyperiods')[0])
+	{
+		document.getElementsByClassName('weeklyperiods')[0].id="selectedPeriodId";
+	}
+	*/
+	displayPeriods();	
+	changeDate();             
+  //});
+  
+
+  function changeDate()
+  {
+    /*
+	if(document.getElementById('sample2'))
+      document.getElementById('sample2').id="selectedPeriodId";
+	*/
+	
+    var dateFormat = 'yyyy-MM-dd';
+    var cyear = new Date().getFullYear()+yearDiff;
+	
+    var cmonth=selMonth;
+	var pyr = cyear-1;
+	var nyr = cyear+1;
+    //alert(cmonth);
+
+    document.getElementById('selectMonths').selectedIndex=cmonth-1;
+
+    var cDate = new Date(cyear+'-01-01');
+    var selFirstDate = cDate;
+    var cday = cDate.getDay();
+    displayMonths(cyear);
+
+    var periods = [];
+
+    var i = 0;
+    var x = 0;
+	
+	// if year is leap year
+
+   	if(  (0 == cyear % 4) && (0 != cyear % 100) || (0 == cyear % 400)  )
+    {
+      if(selMonth=="01")
+      {
+        
+        if( cday == 0 ) 
+        {
+			cDate.setDate(cDate.getDate()+1);
+        }
+        else if( cday == 5 ) 
+        {
+          cDate.setDate( cDate.getDate()+3 );
+        }
+		 else if( cday == 3 )
+        {
+          cDate.setDate( cDate.getDate()-2);
+        }
+		 else if( cday == 6 ) 
+        {
+          cDate.setDate( cDate.getDate()-1);
+        }
+		
+        else 
+        {
+          cDate.setDate( cday - 9 );
+        }
+      }
+      else
+      {
+       
+        if ( cday == 0 ) 
+        {
+          cDate.setDate(2);
+
+          //i=1;
+        }
+        else if ( cday == 1 ) 
+        {
+
+        }
+        else 
+        {
+          cDate.setDate(( 9 - cday ) );
+          //i=1;
+        }
+      }
+    }
+
+	// if year is previous year of leap year
+    else if( (0 == pyr % 4) && (0 != pyr % 100) || (0 == pyr % 400) )
+    {
+
+		if(selMonth=="01")
+      {
+        
+        if( cday == 1 ) 
+        {
+			cDate.setDate(cDate.getDate()-6);
+        }
+        else if( cday == 0 ) 
+        {
+          cDate.setDate( cDate.getDate()+1 );
+        }
+        else 
+        {
+          cDate.setDate( cday - 1 );
+        }
+      }
+      else
+      {
+        
+        if ( cday == 0 ) 
+        {
+          cDate.setDate(2);
+
+          //i=1;
+        }
+        else if ( cday == 1 )
+        {
+
+        }
+        else // others
+        {
+          cDate.setDate(( 9 - cday ) );
+          //i=1;
+        }
+      }
+    }
+	
+	// if year is next to leap year
+	
+	 else if( (0 == nyr % 4) && (0 != nyr % 100) || (0 == nyr % 400) )
+    {
+
+      if(selMonth=="01")
+      {
+       
+        if( cday == 1 ) 
+        {
+
+        }
+        else if( cday == 0 ) 
+        {
+          cDate.setDate( cDate.getDate() - 6 );
+        }
+        else
+        {
+          cDate.setDate( cDate.getDate() - cday + 1 );
+        }
+      }
+      else
+      {
+       
+        if ( cday == 0 ) 
+        {
+          cDate.setDate(2);
+          //console.log("2"+cDate);
+          i=1;
+        }
+        else if ( cday == 1 ) 
+        {
+          //console.log("cday"+cday);
+
+        }
+        else // others
+        {
+          cDate.setDate(( 9 - cday ) );
+
+          i=1;
+        }
+      }
+    }
+   
+     else 
+    {
+
+      if(selMonth=="01")
+      {
+       
+        if( cday == 1 ) 
+        {
+
+        }
+        else if( cday == 0 ) 
+        {
+          cDate.setDate( cDate.getDate() - 6 );
+        }
+        else // others
+        {
+          cDate.setDate( cDate.getDate() - cday + 1 );
+        }
+      }
+      else
+      {
+        if ( cday == 0 ) 
+        {
+          cDate.setDate(2);
+          //console.log("2"+cDate);
+          i=1;
+        }
+        else if ( cday == 1 ) 
+        {
+          //console.log("cday"+cday);
+
+        }
+        else // others
+        {
+          cDate.setDate(( 9 - cday ) );
+
+          i=1;
+        }
+      }
+    }
+
+    //alert(cDate);
+
+    var tempDate = cDate;
+    while ( cDate.getFullYear() <= cyear)
+    {
+      //individual values after adjusting
+      //lower limit ********************************************************
+      if(cDate.getDate()<10)
+        var pdate="0"+cDate.getDate();
+      else
+        var pdate=cDate.getDate();
+
+      var m = cDate.getMonth();
+      if(m<9)
+        var pmonth="0"+(cDate.getMonth()+1);
+      else
+        var pmonth=cDate.getMonth()+1;
+
+      var pyear=cDate.getFullYear();
+      var pfulldate=pyear+'-'+pmonth+'-'+pdate;
+
+      //upper limit ********************************************************
+      cDate.setDate(cDate.getDate()+6)
+      if((cDate.getDate())<10)
+        var pdate1="0"+cDate.getDate();
+      else
+        var pdate1=cDate.getDate();
+
+      var n = cDate.getMonth();
+      if(n<9)
+        var pmonth1="0"+(cDate.getMonth()+1);
+      else
+        var pmonth1=cDate.getMonth()+1;
+
+      var pyear1=cDate.getFullYear();
+      var pfulldate2=pyear1+'-'+pmonth1+'-'+pdate1;
+      //*********************************************************************
+      cDate.setDate(cDate.getDate()+1);
+      //console.log("pfulldate2"+pfulldate2);
+      var period;
+      var namee = 'W' + ( x + 1 ) + ' - ' + pfulldate+' - '+pfulldate2;
+
+      var id = cyear+'W'+(i+1);
+      period= {name:namee, id:id};
+
+
+      if((cmonth==pmonth && today>=cDate && cyear >= pyear1)||(cmonth==1 && pmonth==12  && today>=cDate && selFirstDate>=cDate  && cyear > pyear))
+      {
+     //   alert(cmonth+" +++++ "+pmonth+" +++++ "+today+"+++++++ "+cDate);
+        periods[x] = period;
+
+
+        x++;
+      }
+      i++;
+      if(cmonth=="12")
+      {
+        periods[x] = period}
+
+     //	 alert ("i : "+i+" x: "+x);
+
+      tempDate = cDate;
+
+      displayDate(periods);
+    }
+  }
+  function displayDate(cperiods)
+  {
+    clearOptions();
+
+    if ( cperiods.length > 0 )
+    {
+      addOptionDate( 'selectedPeriodId', '-1', '[ Select Week ]' );
+      //console.log(selectedPeriodId);
+    }
+    else
+    {
+      addOptionDate( 'selectedPeriodId', '-1', '[ Invalid ]' );
+    }
+
+    for(var i=0; i<cperiods.length; i++)
+    {
+      var item=cperiods[i];
+      //alert("periods : "+item.name+" "+item.id);
+      addOptionDate( 'selectedPeriodId', item.id, item.name );
+    }
+  }
+
+  /*
+  for (var val in options) {
+        $option = $('<option value="' + val + '">' + options[val] + '</option>');
+        if (val == default) {
+            $option.attr('selected', 'selected');
+        }
+        $select.append($option);
+    }
+*/		
+  
+  function addOptionDate(list, optionValue, optionText)
+  {
+    var select = document.getElementById(list);
+    var option = document.createElement( "option" );
+    option.value = optionValue;
+    option.text = optionText;
+    select.add( option, null );
+  }
+
+  function changeMonth()
+  {
+    var e=document.getElementById('selectMonths');
+    selMonth=e.options[e.selectedIndex].value;
+	//alert( selMonth );
+    changeDate();
+    verifyPeriod();
+	
+	document.getElementById('selectedPeriodId').selectedIndex=2;
+	var periodId = $( '#selectedPeriodId' ).val();
+    //alert(periodId);
+		
+  }
+
+  function clearOptions()
+  {
+    var select = document.getElementById("selectedPeriodId");
+    var length = select.options.length;
+    for (i = 0; i < length; i++)
+      select.remove(select.selectedIndex);
+  }
+
+  function displayMonths(nyear)
+  {
+    var selectobject1=document.getElementById("selectMonths");
+    for (var i=0; i<12;i++)
+    {
+      selectobject1.remove(selectobject1.selectedIndex);
+    }
+
+    var monthss=["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var valMonths=["01","02","03","04","05","06","07","08","09","10","11","12"];
+
+    for(var m=0; m<12; m++)
+    {
+      var option = document.createElement( "option" );
+      option.value = valMonths[m];
+      option.text = monthss[m];
+      selectobject1.add( option, null );
+
+    }
+    for(var n=12; n>0; n--)
+    {
+      var selectobject=document.getElementById("selectMonths");
+
+      var mDate = new Date(nyear+'-'+n+'-01');
+
+      //alert(today+"    ------    "+mDate);
+      if(today<=mDate)
+      {
+        selectobject.remove(n-1);
+      }
+    }
+
+    document.getElementById('selectMonths').selectedIndex=selMonth-1;
+  }
+
+  function cpreviousYear()
+  {
+    //var selYear = document.getElementById('selectedYear');
+    //yr = selYear.options[selYear.selectedIndex].value;
+	
+	previousPeriodsSelected();
+    yearDiff--;
+	//alert(yearDiff);
+    changeDate();
+    yr--;
+	//alert( yr );
+    verifyPeriod();
+	/*
+    if(yearDiff<0)
+      document.getElementById('nextButton2').disabled=false;
+    else
+      document.getElementById('nextButton2').disabled=true;
+	*/
+  }
+
+  function cnextYear()
+  {
+    nextPeriodsSelected();
+    yearDiff++
+	//alert(yearDiff);
+    changeDate();
+    yr++;
+    verifyPeriod();
+
+    if(yearDiff<0)
+      document.getElementById('nextButton2').disabled=false;
+    else
+      document.getElementById('nextButton2').disabled=true;
+  }
+
+  function verifyPeriod()
+  {
+    var e=document.getElementById('selectedPeriodId');
+    var selVal=e.options[e.selectedIndex].value
+
+    if(selVal=='-1')
+    {
+
+      //dhis2.de.clearEntryForm();
+      //clearEntryForm();
+    }
+    else
+    {
+      WeeklyPeriodSelected();
+    }
+  }
+
+  function WeeklyPeriodSelected()
+  {
+    var periodName = $( '#selectedPeriodId :selected' ).text();
+    var dataSetId = $( '#selectedDataSetId' ).val();
+
+
+    $( '#currentPeriod' ).html( periodName );
+
+    var periodId = $( '#selectedPeriodId' ).val();
+    //alert(periodId);
+	
+	/*
+    if ( dhis2.de.inputSelected() )
+    {
+      showLoader();
+
+      if ( dhis2.de.dataEntryFormIsLoaded )
+      {
+        loadDataValues();
+      }
+      else
+      {
+        dhis2.de.loadForm();
+        //loadForm();
+      }
+    }
+	*/
+	
+  }
+  
+function previousPeriodsSelected()
+{
+	//dhis2.de.currentPeriodOffset--;
+    displayPeriods();
+}
+
+/**
+ * Generates the period select list options.
+ */
+ 
+function displayPeriods()
+{
+    //var dataSetId = $( '#selectedDataSetId' ).val();
+    var periodType = "Weekly";
+    //var openFuturePeriods = dhis2.de.dataSets[dataSetId].openFuturePeriods;
+    //var dsStartDate = dhis2.de.dataSets[dataSetId].startDate;
+    //var dsEndDate = dhis2.de.dataSets[dataSetId].endDate;
+	
+	var selYear = document.getElementById('selectedYear');
+    var selectYear = selYear.options[selYear.selectedIndex].value;
+	var currentYear = new Date().getFullYear();
+    var periods = dhis2.period.generator.generateReversedPeriods( periodType, selectYear-currentYear );
+
+	/*
+    periods = dhis2.period.generator.filterOpenPeriods( periodType, periods, openFuturePeriods, dsStartDate, dsEndDate );
+
+    var periodWhitelist = dhis2.de.dataSets[dataSetId].dataInputPeriods
+        .filter(function(dip) { return ( dip.openingDate == "" || new Date( dip.openingDate ) <= Date.now() ) && ( dip.closingDate == "" || Date.now() <= new Date( dip.closingDate )); })
+        .map(function(dip) { return dip.period.isoPeriod; });
+  
+    if ( periodWhitelist.length > 0 ) {
+        periods = periods
+            .filter(function (period) {
+                return periodWhitelist.indexOf(period.iso) > -1
+            });
+    }
+	*/
+	
+    clearListById( 'selectedPeriodId' );
+	
+	var temp = "Select Period"
+	
+    if ( periods.length > 0 )
+    {
+    	addOptionById( 'selectedPeriodId', "", '[ ' + temp + ' ]' );
+    }
+    else
+    {
+    	addOptionById( 'selectedPeriodId', "", temp );
+    }
+	
+	for ( var i = 0; i < periods.length; i++)
+	{
+		addOptionById( 'selectedPeriodId', periods[i].iso, periods[i].name );
+	}
+	
+}
+  
+</script>

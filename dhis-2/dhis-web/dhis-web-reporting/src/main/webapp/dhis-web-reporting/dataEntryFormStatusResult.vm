@@ -1,0 +1,85 @@
+
+<script type="text/javascript">
+
+    function exportDataStatusResultToWorkBook()
+    {
+        document.getElementById('htmlCode').value = document.getElementById('formResult').innerHTML;
+        return true;
+    }
+
+</script>
+
+
+<form id="form1" name="form1" action="exportDataStatusToExcel.action" method="post" onsubmit="return exportDataStatusResultToWorkBook()" target="_newtab" style="height:100%; margin-top:1%; padding-top:1% cellpadding:1%; cellpadding:1%" >	
+#set( $tabIndex = 1 )
+#if ( $dataElementList.size() > 0 )
+	
+	<input type="hidden" name="htmlCode" id="htmlCode" />
+	<div align="right" class="NormalB" style="height:25%">
+		<input type="submit" name="ExportToWorkBook" value="Export To WorkBook" style="width: 160; height: 25; font-family:Arial; font-weight:bold; color:#000000">
+    </div>
+	
+ <div id="formResult" style="height:75%;top: 50px">
+    <table class="formSection" style="width:100%; height:70%;top: 50px" border="1">
+    	<tr bgcolor="#CBDDEB">
+            <h3><th colspan="4" style="text-align: center;">DataSet : $dataSet.name ( $dataSet.getDataElements().size() With Category -  $dataSetMemberCount )  Data Entry Form : ( $dataElementList.size() )</th></h3>
+    	</tr>	
+    </ br>
+    	
+    	<tr bgcolor="#CBDDEB">
+			<th style="text-align: center;">$i18n.getString( "Sr No." )</th>
+    		<th style="text-align: center;">$i18n.getString( "Data Element Id" )</th>
+    		<th style="text-align: center;">$i18n.getString( "Data Element UID" )</th>
+    		<th style="text-align: center;">$i18n.getString( "Data Element Name" )</th>
+    	</tr>
+    	#set( $slNo = 1 )
+    	#set( $mark = false )
+    	#foreach($dataElement in $dataElementList )
+    		<tr #alternate($mark)>
+				<td style="text-align: center;" ><label>$slNo</label></td>
+    			<td style="text-align: center;" ><label>$dataElement.id</label></td>
+    			<td><label>$dataElement.uid</label></td>
+    			<td><label>$dataElement.name</label></td>
+    		</tr>
+			#set( $slNo = $slNo + 1 )
+    		#set( $tabIndex = $tabIndex + 1 )
+    		#set( $mark = !$mark)	
+    	#end
+    </table>
+	
+	
+	<!-- list of DataElements which are not mapped in dataEntry screen -->
+	#if ( $deList.size() > 0 )
+		
+        <table class="formSection" style="width:100%; height:70%" border="1">
+        	<tr bgcolor="#CBDDEB">
+                <h3><th colspan="4" style="text-align: center;">DataElements which are not mapped in data entry form</th></h3>
+        	</tr>	
+        </ br>
+        	
+        	<tr bgcolor="#CBDDEB">
+    			<th style="text-align: center;">$i18n.getString( "Sr No." )</th>
+        		<th style="text-align: center;">$i18n.getString( "Data Element Id" )</th>
+        		<th style="text-align: center;">$i18n.getString( "Data Element UID" )</th>
+        		<th style="text-align: center;">$i18n.getString( "Data Element Name" )</th>
+        	</tr>
+        	#set( $slNo = 1 )
+        	#set( $mark = false )
+        	#foreach($de in $deList )
+        		<tr #alternate($mark)>
+    				<td style="text-align: center;" ><label>$slNo</label></td>
+        			<td style="text-align: center;" ><label>$de.id</label></td>
+        			<td><label>$de.uid</label></td>
+        			<td><label>$de.name</label></td>
+        		</tr>
+    			#set( $slNo = $slNo + 1 )
+        		#set( $tabIndex = $tabIndex + 1 )
+        		#set( $mark = !$mark)	
+        	#end
+        </table>		
+		
+	#end	
+	
+#end
+</div>
+</form>

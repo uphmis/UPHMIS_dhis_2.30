@@ -1,0 +1,116 @@
+
+<h3>Indicator Report Analyser</h3>
+<hr /><br />
+
+<form id="reportForm" name="reportForm" action="generateEDReport.action" method="post" onsubmit="return formValidationsForEDReport()" target="_blank">
+    <table align="center" style=" border-collapse: collapse; margin-top: 0;" cellpadding="0" cellspacing="0" width="70%" border=0>
+        <tr>
+            <td width="40%" class="NormalB">
+                1.$i18n.getString( "indicator_group" ) :<br />
+                <select id="indicatorGroupId" name="indicatorGroupId" style="width:300px" onChange="getIndicators()">
+                    <option value="0">[ Select IndicatorGroup / All ]</option>
+                    #foreach ( $group in $indicatorGroups )
+                    <option value="$group.id" title="$group.name">$group.name</option>
+                    #end
+                </select>
+            </td>
+			<td width="15%">&nbsp;</td>
+            <td width="45%" class="NormalB">
+                3.From Date : <br />
+                <select id="selectedStartPeriodId" name="selectedStartPeriodId" style="width:300px">
+                    #foreach ( $mperiod in $periods )
+                        <option value="$mperiod.id">$simpleDateFormat.format( $mperiod.startDate )</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="NormalB">$i18n.getString( "filter" ):&nbsp;<br /><input type="text" id="availableIndicatorsFilter" onkeyup="filterAvailableIndicators()" style="width:300px"></td>
+            <td>&nbsp;</td>
+            <td class="NormalB">
+                4.To Date : <br />
+                <select id="selectedEndPeriodId" name="selectedEndPeriodId" style="width:300px">
+                    #foreach ( $mperiod in $periods )
+                        <option value="$mperiod.id">$simpleDateFormat.format( $mperiod.startDate )</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+    <tr>
+		<td class="NormalB">$i18n.getString( "available_indicatorList" )<br>
+			<select multiple size="7" id="availableIndicators" name="availableIndicators"  style="width:300px; height:100px" ondblclick="moveSelectedById( 'availableIndicators', 'selectedIndicators' )">
+				#foreach ( $element in $indicators )
+					<option value="$element.id" title="$element.name">$element.name</option>
+				#end
+			</select>
+		</td>
+		<td class="NormalB" align="center">
+			<input type="button" value="&gt;" style="width:40px" onClick="moveSelectedById( 'availableIndicators', 'selectedIndicators' )"><br>
+			<input type="button" value="&lt;" style="width:40px" onClick="moveSelectedById( 'selectedIndicators', 'availableIndicators' )"><br>
+			<input type="button" value="&gt;&gt;" style="width:40px" onClick="moveAllById( 'availableIndicators', 'selectedIndicators' )"><br>
+			<input type="button" value="&lt;&lt;" style="width:40px" onClick="moveAllById( 'selectedIndicators', 'availableIndicators' )">
+		</td>
+		<td class="NormalB"> $i18n.getString( "selected_IndicatorList" )<br />
+			<select multiple size="7" id="selectedIndicators" name="selectedIndicators"  style="width:300px; height:100px" ondblclick="moveSelectedById( 'selectedIndicators', 'availableIndicators' )">
+			</select>
+		</td>		
+        <tr>
+            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+        </tr>				
+        <tr>
+            <td class="NormalB">
+                2.$i18n.getString( "generated_data_type" ) :<br />
+                <select id="aggData" name="aggData" style="width:300px">
+                    <option value="generateaggdata">$i18n.getString( "generate_agg_data" )</option>
+                    <option value="useexistingaggdata">$i18n.getString( "use_existing_agg_data" )</option>
+                    <option value="usecaptureddata">$i18n.getString( "use_captured_data" )</option>
+                </select>
+            </td>
+			<td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>		
+        <tr>
+            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+        <tr>   
+            <td class="NormalB"><input type="button" name="generate" value='Generate Indicator Report' style="width:300px" onclick="callAction('INDICATOR')" /></td>
+			<td>&nbsp;</td>            
+			<td class="NormalB"><input type="button" name="generate" value='Generate Ranking Report' style="width:300px" onclick="callAction('RANKING')" /></td>
+            
+        </tr>
+    </table>  
+ </form>
+
+<script type="text/javascript">
+
+	var availableIndicators = new Object();	
+    #foreach ( $availableIndicator in $indicators )
+    	availableIndicators['$availableIndicator.id'] = '$encoder.jsEscape( $availableIndicator.name, "'" )';
+    #end
+
+</script>
+
+<script>	
+function callAction( actionName )
+{
+	if( formValidationsForEDReport() )
+	{        
+		if( actionName == "INDICATOR" )
+		{
+			document.reportForm.action = "generateEDReport.action";
+			document.reportForm.submit();
+		}
+		else
+		{
+			document.reportForm.action = "generateEDRankingReport.action";
+			document.reportForm.submit();
+		}
+	}
+}	
+</script>

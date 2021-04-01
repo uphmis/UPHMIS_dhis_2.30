@@ -1,0 +1,29 @@
+
+<h2>$i18n.getString( "data_integration" )</h2>
+<ul>
+    <ul>
+        <li>
+            <a href = "excelImportForm.action">$i18n.getString( "data_import_from_excel" )</a>
+			<!--<a href = "completeDataSetRegistrationForm.action">$i18n.getString( "complete_dataset" )</a>-->
+        </li>
+    </ul>        
+ </ul>       
+
+<!--
+<ul>
+     <ul>   
+		<li>
+            <a href = "../dhis-web-reporting/displayViewDocumentForm.action">$i18n.getString( "download_reporting_format" )</a>
+			#if( $auth.hasAccess( "dhis-web-excelimport", "importForm") )
+				<a href = "importForm.action">$i18n.getString( "import_ecmis" )</a>
+			#end
+			
+			#if( $auth.hasAccess( "dhis-web-excelimport", "displayDataSetAssignEditorForm") )
+				<a href = "displayDataSetAssignEditorForm.action">$i18n.getString( "DataSet Assign Editor" )</a>
+			#end			
+			
+        </li>		
+
+     </ul>   
+</ul>
+-->

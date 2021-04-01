@@ -1,0 +1,69 @@
+
+
+<h1>Upload Data</h1>
+<hr /><br />
+    
+<form id="reportForm" name="reportForm" method="post" enctype="multipart/form-data" action="importDataResult.action">
+    <input type="hidden" id="curLocaleCode" value="$locale.getLanguage()_$locale.getCountry()"/>
+    <table style=" border-collapse: collapse; margin-top: 0;" cellpadding="0" cellspacing="0" width="730" border=0>
+        
+        <tr>
+            <td class="NormalB">
+                 Upload Data : <br/>
+                 <br/>
+                <input type="file" id="upload" name="upload" size="31" class="{validate:{required:true}}">
+            </td>			
+			
+       	</tr>	
+       	
+       	
+       	</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr> 	
+		
+        <tr>
+           
+			<td class="NormalB">
+                <input type="submit" name="importReport" value='Import Data' style="width:250px">
+            </td>
+        </tr>                 
+       
+       
+    </table>
+</form>
+
+<script>
+    //-----------------------------------------------------------------------
+    //init jQuery validation for reportForm
+    //-----------------------------------------------------------------------
+    jQuery(document).ready(
+            function()
+            {	
+                jQuery("#reportForm").validate({
+                     meta:"validate"
+                    ,errorElement:"td"
+                    ,submitHandler: function(form)
+                    {
+                        submitImportForm();
+                    }
+                });
+                jQuery("#name").focus();
+            }
+    );
+    
+
+</script>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataSets>
+	#foreach( $dataSet in $dataSets )	
+		<dataset>
+			<id>$dataSet.id</id>
+			<name>$encoder.xmlEncode( $dataSet.getName() )</name>
+		</dataset>
+	#end
+	#foreach( $period in $periods )	
+		<period>
+			<id>$period.id</id>
+			<name>$encoder.xmlEncode( $period.name )</name>
+		</period>
+	#end
+</dataSets>

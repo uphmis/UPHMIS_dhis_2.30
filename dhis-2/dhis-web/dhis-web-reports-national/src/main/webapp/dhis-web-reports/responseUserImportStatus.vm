@@ -1,0 +1,18 @@
+
+<br/>
+
+<input type="button" value="Back" onclick="window.location.href='populateMultipleUsersForm.action'" />
+<br/><br/>
+
+<!--<span id="message" style="display:block">$encoder.xmlEncode( $message )</span>-->
+#if($userImportStatusMsgList.size() !=0 )
+<table bgcolor="#FFFF00" >
+	#foreach( $userImportStatusMsg in $userImportStatusMsgList )
+		<tr>
+			<td>$encoder.htmlEncode($!userImportStatusMsg)</td>
+		</tr>
+	#end
+</table
+#else
+	<span id="message" style="display:block">$encoder.xmlEncode( $message )</span>
+#end

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    
+    <!-- use the DHIS web portal default -->
+    <include file="dhis-web-commons.xml"/>
+
+    <package name="dhis-web-reports" extends="dhis-web-commons" namespace="/dhis-web-reports">
+        
+        <action name="index"
+            class="org.hisp.dhis.reports.action.ReportsHomePageAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/welcome.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+        </action>
+
+        <!-- User Addition/Population -->
+        <action name="populateUsers"
+            class="org.hisp.dhis.reports.action.AddUserAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/welcome.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+            <param name="javascripts">../dhis-web-commons/calendar/calendar.js,../dhis-web-commons/calendar/calendar-lang.js,../dhis-web-commons/calendar/calendar-setup.js,../dhis-web-commons/ouwt/ouwt.js,../dhis-web-commons/javascripts/lists.js,javascript/reportManagement.js,javascript/hashtable.js</param>
+            <param name="stylesheets">css/StylesForTags.css</param>
+            <param name="requiredAuthorities">F_REPORT_POPULATE_USERS</param>
+            <interceptor-ref name="organisationUnitTreeStack"/>
+        </action>
+        
+        <!-- Multiple User Addition/Population Form-->
+        <action name="populateMultipleUsersForm"
+            class="org.hisp.dhis.reports.action.AddMultipleUserFormAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/userUploadForm.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+            <param name="javascripts">../dhis-web-commons/ouwt/ouwt.js,../dhis-web-commons/javascripts/lists.js,javascript/reportManagement.js,javascript/hashtable.js</param>
+            <param name="stylesheets">css/StylesForTags.css</param>
+            <param name="requiredAuthorities">F_REPORT_POPULATE_USERS</param>
+            <interceptor-ref name="organisationUnitTreeStack"/>
+        </action>        
+ 
+		<!-- Multiple User Addition/Population Result -->
+        <action name="populateMultipleUsers" class="org.hisp.dhis.reports.action.AddMultipleUserAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/responseUserImportStatus.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+            <interceptor-ref name="fileUploadStack"/>
+        </action>        
+                
+
+        <!-- AJAX Requests -->
+        <action name="getDataElements"
+            class="org.hisp.dhis.reports.action.GetDataElementsAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseDataElement.vm</result>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+        
+        <action name="getPeriods"
+            class="org.hisp.dhis.reports.action.GetPeriodsAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responsePeriod.vm</result>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+        
+        <action name="getReports"
+            class="org.hisp.dhis.reports.action.GetReportsAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseReport.vm</result>
+            <param name="javascripts">../dhis-web-commons/ouwt/ouwt.js,javascript/reportManagement.js,javascript/hashtable.js</param>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+		
+       <action name="getProgramList"
+            class="org.hisp.dhis.reports.action.GetProgramListAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseProgramList.vm</result>
+				<param name="javascripts">../dhis-web-commons/ouwt/ouwt.js,../dhis-web-commons/javascripts/lists.js,javascript/reports,javascript/reportManagement.js,javascript/hashtable.js</param>
+				<param name="onExceptionReturn">plainTextError</param>
+        </action>				
+		
+        <action name="getProgressReports"
+            class="org.hisp.dhis.reports.action.GetProgressReportsAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseReport.vm</result>
+            <param name="javascripts">../dhis-web-commons/ouwt/ouwt.js,../dhis-web-commons/javascripts/lists.js,javascript/reports.js,javascript/hashtable.js</param>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+
+        <action name="getOrgUnitGroups"
+            class="org.hisp.dhis.reports.action.GetOrgUnitGroupsAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseOrgUnitGroup.vm</result>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+
+        <action name="getOrgUnitDetails"
+            class="org.hisp.dhis.reports.action.GetOrgUnitsAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseOrgUnit.vm</result>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+
+        
+        <!-- Reports Management -->
+        <action name="reportManagement"
+            class="org.hisp.dhis.reports.reportmanagement.action.ReportsListAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/reportsList.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+            <param name="javascripts">javascript/reportManagement.js,javascript/filterTable.js</param>
+            <param name="requiredAuthorities">F_REPORT_MANAGEMENT_LIST</param>
+        </action>
+        
+        <!-- Report Management Addition -->
+        <action name="addReportForm"
+            class="org.hisp.dhis.reports.reportmanagement.action.AddReportFormAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/addReportForm.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+            <param name="javascripts">javascript/reportManagement.js</param>
+        </action>
+        <action name="addReport"
+            class="org.hisp.dhis.reports.reportmanagement.action.AddReportAction">
+            <result name="success" type="redirect">reportManagement.action</result>
+        </action>
+        
+        <!-- Report Editing/Updation -->
+        <action name="editReportForm"
+            class="org.hisp.dhis.reports.reportmanagement.action.UpdateReportForm">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/editReportForm.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+            <param name="javascripts">javascript/reportManagement.js</param>
+        </action>
+        <action name="editReport"
+            class="org.hisp.dhis.reports.reportmanagement.action.UpdateReportAction">
+            <result name="success" type="redirect">reportManagement.action</result>
+        </action>
+        
+        <!-- Report Management Validation during Addition or Updation of Report -->
+        <action name="validateReport"
+            class="org.hisp.dhis.reports.reportmanagement.action.ValidateReportAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseReportManagementSuccess.vm</result>
+            <result name="input" type="velocity-xml">/dhis-web-reports/responseReportManagementInput.vm</result>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+        <!-- Get Report details -->
+        <action name="getReport"
+            class="org.hisp.dhis.reports.reportmanagement.action.GetReportAction">
+            <result name="success" type="velocity-xml">/dhis-web-reports/responseReportManagementObject.vm</result>
+            <param name="onExceptionReturn">plainTextError</param>
+        </action>
+        
+        <!-- Report Association -->
+        <action name="defineReportAssociationsForm"
+            class="org.hisp.dhis.reports.reportmanagement.action.SetupAssociationsTreeAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="menu">/dhis-web-reports/menu.vm</param>
+            <param name="page">/dhis-web-reports/reportAssociations.vm</param>
+            <param name="javascripts">../dhis-web-commons/oust/oust.js,javascript/reportManagementAssociations.js</param>
+		</action>		
+        <!-- Report Association save -->
+        <action name="defineReportAssociations"
+            class="org.hisp.dhis.reports.reportmanagement.action.DefineReportAssociationsAction">
+            <result name="success" type="redirect">reportManagement.action</result>
+        </action>
+
+        <!-- Report Deletion -->
+        <action name="delReport"
+            class="org.hisp.dhis.reports.reportmanagement.action.DelReportAction">
+            <result name="success" type="redirect">reportManagement.action</result>
+        </action>
+
+
+        <!-- HMIS Reports -->
+        <action name="hmisReportAnalyser"
+            class="org.hisp.dhis.reports.hmis.action.GenerateHMISReportAnalyserFormAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/hmisReportAnalysisFront.vm</param>
+            <param name="menu">/dhis-web-reports/menuWithTreeForHMISReports.vm</param>
+            <param name="javascripts">../dhis-web-commons/ouwt/ouwt.js,javascript/reportManagement.js,javascript/hashtable.js</param>
+            <param name="stylesheets">css/StylesForTags.css</param>
+            <param name="requiredAuthorities">F_REPORT_HMIS</param>
+            <interceptor-ref name="organisationUnitTreeStack"/>
+        </action>
+        <action name="generateHMISReport"
+            class="org.hisp.dhis.reports.hmis.action.GenerateHMISReportAnalyserResultAction">
+            <result name="success" type="stream">
+                <param name="contentType">application/vnd.ms-excel</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentDisposition">filename="${fileName}"</param>
+                <param name="bufferSize">1024</param>
+            </result>
+        </action>
+
+
+        <!-- HMIS Bulk Reports -->
+        <action name="bulkHMISReportAnalyser"
+            class="org.hisp.dhis.reports.bulkhmis.action.GenerateBulkHMISReportAnalyserFormAction">
+            <result name="success" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/bulkHMISReportAnalysisFront.vm</param>
+            <param name="menu">/dhis-web-reports/menuWithTreeForBulkHMISReport.vm</param>
+            <param name="javascripts">../dhis-web-commons/ouwt/ouwt.js,javascript/reportManagement.js,javascript/hashtable.js</param>
+            <param name="stylesheets">css/StylesForTags.css</param>
+            <param name="requiredAuthorities">F_REPORT_BULK_HMIS</param>
+            <interceptor-ref name="organisationUnitTreeStack"/>
+        </action>		
+
+        <action name="generateBulkHMISReport"
+            class="org.hisp.dhis.reports.bulkhmis.action.GenerateBulkHMISReportAnalyserResultAction">
+            <result name="success" type="stream">
+                <param name="contentType">application/zip</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentDisposition">filename="${fileName}"</param>
+                <param name="bufferSize">1024</param>
+            </result>
+            <result name="input" type="velocity">/main.vm</result>
+            <param name="page">/dhis-web-reports/bulkHMISReportSucess.vm</param>
+            <param name="menu">/dhis-web-reports/menu.vm</param>            
+        </action>
+
+       
+	
+    </package>
+</struts>

@@ -1,0 +1,109 @@
+
+
+<h1>Upload Data</h1>
+<hr /><br />
+    
+<form id="reportForm" name="reportForm" method="post" enctype="multipart/form-data" action="importDataResult.action">
+    <input type="hidden" id="curLocaleCode" value="$locale.getLanguage()_$locale.getCountry()"/>
+    <table style=" border-collapse: collapse; margin-top: 0;" cellpadding="0" cellspacing="0" width="730" border=0>
+         <tr style="display:none">
+            <td class="NormalB">
+                PeriodType : <br />
+                <select id="periodTypeId" name="periodTypeId" style="width:200px">
+                    <option value="Weekly">Weekly</option>
+                </select>
+            </td>
+			<td>&nbsp;</td>
+        </tr>       
+        <tr>
+            <td class="NormalB">
+                 Upload Data : <br/>
+                 <br/>
+                <input type="file" id="upload" name="upload" size="31" class="{validate:{required:true}}">
+            </td>			
+			<td>&nbsp;</td>
+            <td class="NormalB">
+                1. Year : <br /><br />
+                <select id="year" name="year" style="width:150px" onchange="getWeeklyPeriods()">
+                    <option value="NA">[ Select Year ]</option>
+                    #foreach ( $year in $yearList )
+                        <option value="$year">$year</option>
+                    #end
+                </select>
+            </td>
+			<td>&nbsp;</td>
+            <td class="NormalB">
+                2. Month : <br /><br />
+                <select id="month" name="month" style="width:150px" onchange="getWeeklyPeriods()">
+                    <option value="01">January</option>
+					<option value="02">February</option>
+					<option value="03">March</option>
+					<option value="04">April</option>
+					<option value="05">May</option>
+					<option value="06">June</option>
+					<option value="07">July</option>
+					<option value="08">August</option>
+					<option value="09">September</option>
+					<option value="10">October</option>
+                    <option value="11">November</option>
+					<option value="12">December</option>
+                </select>
+            </td>
+			<td>&nbsp;</td>
+            <td class="NormalB">
+                3. Weekly Periods : <br /><br />
+                <select id="availablePeriods" name="availablePeriods" style="width:215px" class="{validate:{required:true}}">
+                    <option value="EMPTY_PLACEHOLDER_VALUE"></option>
+                </select>
+            </td>			
+       	</tr>
+       	</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr> 	
+		
+        <tr>
+           
+			<td class="NormalB">
+                <input type="submit" name="importReport" value='Import Data' style="width:180px">
+            </td>
+        </tr>                 
+       
+       
+    </table>
+</form>
+
+<script>
+    //-----------------------------------------------------------------------
+    //init jQuery validation for reportForm
+    //-----------------------------------------------------------------------
+    jQuery(document).ready(
+            function()
+            {	
+                jQuery("#reportForm").validate({
+                     meta:"validate"
+                    ,errorElement:"td"
+                    ,submitHandler: function(form)
+                    {
+                        submitImportForm();
+                    }
+                });
+                jQuery("#name").focus();
+            }
+    );
+    
+
+</script>

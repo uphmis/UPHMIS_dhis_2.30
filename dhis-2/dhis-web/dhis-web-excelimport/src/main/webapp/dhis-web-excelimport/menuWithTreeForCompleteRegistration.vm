@@ -1,0 +1,31 @@
+
+<a href="index.action"><h2>Data Integration</h2></a>
+<ul>
+    <li>Data Import</li>
+    <ul>
+        <li><a href = "excelImportForm.action">Data Import From Excel</a></li>
+		<a href = "completeDataSetRegistrationForm.action">Complete Dataset</a>
+    </ul>
+</ul>
+
+<br/>
+
+#parse( "/dhis-web-commons/ouwt/orgunittreesearch.vm" )
+
+<script type="text/javascript">
+
+    function orgUnitHasBeenSelected( orgUnitIds )
+    {
+        document.completeDataSetRegistrationForm.organisationUnitUid.value = orgUnitIds;
+        
+        document.getElementById("organisationUnitName").value = "";
+
+        if( orgUnitIds != null && orgUnitIds != "" )
+        {
+            getOUDetailsForComplete( orgUnitIds )
+        }
+    }
+
+    selection.setListenerFunction( orgUnitHasBeenSelected );
+
+</script>

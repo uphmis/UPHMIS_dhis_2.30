@@ -1,0 +1,104 @@
+<script type="text/javascript">
+	var i18n_organisation_unit_not_selected = '$encoder.jsEscape( $i18n.getString( "organisation_unit_not_selected" ) , "'")';
+	var i18n_period_not_selected = '$encoder.jsEscape( $i18n.getString( "period_not_selected" ) , "'")';
+	var i18n_dataset_not_selected = '$encoder.jsEscape( $i18n.getString( "dataset_not_selected" ) , "'")';
+	
+	var i18n_period_type_not_selected = '$encoder.jsEscape( $i18n.getString( "period_type_not_selected" ) , "'")';
+	
+</script>
+
+<h3>$i18n.getString( "lock_exception_management" )</h3>
+	
+<form id="saveDeleteLockExceptionForm" name="saveDeleteLockExceptionForm" action="saveDeleteLockException.action" method="POST">
+	<input type="hidden" id="selectBetweenLockException" name="selectBetweenLockException"/>
+	<table>
+		<tr>
+			<td valign="top">
+				<table valign="top">
+					<tr><th>$i18n.getString( "period_type" )</th>
+					<td>&nbsp;</td>
+						<td><a href="lockException.action">View Lock Exception</a></td>
+					</tr>
+					<tr>
+						<td>
+							<select id="periodTypeId" name="periodTypeId" style="min-width:325px" onchange="getPeriodsAndDataSets()" #if( $periodTypes.size() == 0 ) disabled="disabled" #end >
+								<option value="-1">[ $i18n.getString( "select_period_type" ) ]</option>
+								#foreach ( $periodType in $periodTypes )
+								  <option value="$periodType.name">$periodType.name</option>
+								#end
+							</select>
+						</td>
+					</tr>
+					
+					<tr><td>&nbsp;</td></tr>
+					
+					<tr><th>$i18n.getString( "available_periods" )</th><td></td><th>$i18n.getString( "selected_periods" )</th></tr>
+					
+					<tr>	
+						<td>	
+							<select id="availablePeriods" name="availablePeriods" multiple="multiple" style="min-width:325px;height:11.25em" disabled="true" ondblclick="moveSelectedById( this.id, 'selectedPeriods' )">
+							</select>
+						</td>
+						<td style="text-align:center">			
+							<input type="button" value="&gt;" title="$i18n.getString('move_selected')" style="width:50px" onclick="moveSelectedById( 'availablePeriods', 'selectedPeriods' )" /><br/>
+							<input type="button" value="&lt;" title="$i18n.getString('remove_selected')" style="width:50px" onclick="moveSelectedById( 'selectedPeriods', 'availablePeriods' )" /><br/>
+							<input type="button" value="&gt;&gt;" title="$i18n.getString('move_all')" style="width:50px" onclick="moveAllById( 'availablePeriods', 'selectedPeriods' )"/><br/>
+							<input type="button" value="&lt;&lt;" title="$i18n.getString('remove_all')" style="width:50px" onclick="moveAllById( 'selectedPeriods', 'availablePeriods' )"/>			
+						</td>	
+						<td>
+							<select id="selectedPeriods" name="selectedPeriods" size="2" multiple="multiple" style="min-width:325px;height:11.25em" ondblclick="moveSelectedById( this.id, 'availablePeriods' )"></select>
+						</td>
+					</tr>
+						
+					<tr><td>&nbsp;</td></tr>
+					
+					<tr><th>$i18n.getString( "available_datasets" )</th><td></td><th>$i18n.getString( "selected_datasets" )</th></tr>
+					<tr>
+						<td>
+							<select id="availableDataSets" name="availableDataSets" multiple="multiple" style="min-width:325px;height:12.5em" ondblclick="moveSelectedById( this.id, 'selectedDataSets' )" disabled="true"></select>				
+						</td>
+						<td style="text-align:center">			
+							<input type="button" value="&gt;" title="$i18n.getString('move_selected')" style="width:50px" onclick="moveSelectedById( 'availableDataSets', 'selectedDataSets' )" /><br/>
+							<input type="button" value="&lt;" title="$i18n.getString('remove_selected')" style="width:50px" onclick="moveSelectedById( 'selectedDataSets', 'availableDataSets' )" /><br/>
+							<input type="button" value="&gt;&gt;" title="$i18n.getString('move_all')" style="width:50px" onclick="moveAllById( 'availableDataSets', 'selectedDataSets' )"/><br/>
+							<input type="button" value="&lt;&lt;" title="$i18n.getString('remove_all')" style="width:50px" onclick="moveAllById( 'selectedDataSets', 'availableDataSets' )"/>			
+						</td>	
+						<td>
+							<select id="selectedDataSets" name="selectedDataSets" size="2" multiple="multiple" style="min-width:325px;height:11.25em" ondblclick="moveSelectedById( this.id, 'availableDataSets' )"></select>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<br />
+	<table>
+		<tr>
+			<td>#organisationUnitSelectionTree( true, true, false )</td>										
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<th>$i18n.getString( "expire_on_date" )
+                <input type="text" id="expireOnDate" name="expireOnDate" value="$!encoder.htmlEncode( $expireOnDate )" onChange="if(!isDate( this.value )) this.value='';" style="width:180px" >				
+			</th>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			
+			#if( $auth.hasAccess( "dhis-web-reporting", "advanceLockException") )
+				<td>
+					<input type="submit" id="lockException" name="lockException" onclick="setClickedButtonElementValue( true )" value="$i18n.getString( 'create_lock_exception' )" style="width:12em" disabled="true" />&nbsp;&nbsp;
+					<input type="submit" id="delete" name="delete" onclick="setClickedButtonElementValue( false )" value="$i18n.getString( 'delete_lock_exception' )" style="width:12em" disabled="true"/>
+				</td>
+			#end
+			
+		</tr>
+	</table>
+</form>
+
+<span id="message"></span>
+<script type="text/javascript"> 
+    jQuery( function(){
+            datePickerInRange( "expireOnDate", "expireOnDate", false, false );
+    });     
+</script>

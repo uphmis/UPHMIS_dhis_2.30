@@ -1,0 +1,66 @@
+<br/>
+
+<input type="button" value="Back" onclick="window.location.href='excelImportForm.action'" />
+<br/>
+<!--<span id="message" style="display:block">$encoder.xmlEncode( $message )</span>-->
+
+<h1>Import Status for $encoder.htmlEncode($!dataSetName) ,OrganisationUnit - $encoder.htmlEncode($!organisationUnitName)
+,Period - $encoder.htmlEncode($!periodName)</h1>
+
+#if( $insertStatusMsgList.size() !=0 || $updateStatusMsgList.size() !=0 || $ignoreStatusMsgList.size() !=0 )
+
+	<h1>Insert List</h1>
+	#if($insertStatusMsgList.size() !=0 )
+	<table>
+		#foreach( $insertStatusMsg in $insertStatusMsgList )
+			<tr>
+				<td>$encoder.htmlEncode($!insertStatusMsg)</td>
+			</tr>
+		#end
+	</table
+	#else
+		<tr>
+			<td>No Records</td>
+		</tr>
+	#end
+
+	<br/>
+	<h1>Update List</h1>
+
+	#if( $updateStatusMsgList.size() !=0 )
+	<table>
+		#foreach( $updateStatusMsg in $updateStatusMsgList )
+			<tr>
+				<td>$encoder.htmlEncode($!updateStatusMsg)</td>
+			</tr>
+		#end
+	</table
+	#else
+		<tr>
+			<td>No Records</td>
+		</tr>
+	#end
+	<br/>
+	<h1>Ignore List</h1>
+
+	#if( $ignoreStatusMsgList.size() !=0 )
+	<table>
+		#foreach( $ignoreStatusMsg in $ignoreStatusMsgList )
+			<tr>
+				<td>$encoder.htmlEncode($!ignoreStatusMsg)</td>
+			</tr>
+		#end
+	</table
+	#else
+		<tr>
+			<td>No Records</td>
+		</tr>
+	#end
+
+#else
+
+	#if( $ignoreStatusMsgList.size() == 0 && $updateStatusMsgList.size() == 0 && $insertStatusMsgList.size() == 0 )
+		<span id="message" style="display:block">$encoder.xmlEncode( $message )</span>
+	#end	
+	
+#end

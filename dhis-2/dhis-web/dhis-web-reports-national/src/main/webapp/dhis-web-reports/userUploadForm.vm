@@ -1,0 +1,74 @@
+
+<script>
+    //-----------------------------------------------------------------------
+    //init jQuery validation for reportForm
+    //-----------------------------------------------------------------------
+    jQuery(document).ready(
+            function()
+            {
+                jQuery("#userPopulateForm").validate({
+                     meta:"validate"
+                    ,errorElement:"td"
+                    ,submitHandler: function(form)
+                    {
+                        submitImportForm();
+                    }
+                });
+                jQuery("#name").focus();
+            }
+    );
+</script>
+
+<h1>User Populate Form</h1>
+<hr /><br />
+    
+<form id="userPopulateForm" name="userPopulateForm" method="post" enctype="multipart/form-data" action="populateMultipleUsers.action">
+    <input type="hidden" id="curLocaleCode" value="$locale.getLanguage()_$locale.getCountry()"/>
+    <table align="center" style=" border-collapse: collapse; margin-top: 0;" cellpadding="0" cellspacing="0" width="730" border=0>
+
+        <tr>
+            <td>
+                Upload/Import (XLS) File :
+			</td>
+			<td>
+                <input type="file" id="upload" name="upload" size="31" class="{validate:{required:true}}">
+            </td>
+        </tr>
+
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="importReport" value='Import Data' style="width:200px">
+            </td>
+        </tr>                   
+
+        <tr>
+			<td>&nbsp;</td>
+            <td colspan="2"><span id="message"></span></td>
+        </tr>
+    </table>
+</form>
+
+<script>
+
+    function onloadFun()
+    {
+        #if($message)
+            document.getElementById( 'message' ).innerHTML = '$message';
+            document.getElementById( 'message' ).style.display = 'block';
+            setTimeout(
+                function()
+                {
+                    document.getElementById( 'message' ).style.display = 'none';
+                },
+                4000
+            );  
+        #end
+    }
+    
+    onloadFun();
+    
+</script>

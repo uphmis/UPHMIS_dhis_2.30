@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reports>
+    #foreach( $report in $reportList )
+    	<report>
+        	<id>$report.id</id>
+        	<name>$report.name</name>
+        	<model>$report.model</model>
+        	<fileName>$encoder.xmlEncode( $report.getExcelTemplateName() )</fileName>
+			<ouName>$encoder.xmlEncode( $ouName )</ouName>
+			<ouLavel>$selectedOrgUnitLevel</ouLavel>
+    	</report>
+    #end
+</reports>

@@ -1,0 +1,23 @@
+<h2>Report Analyser</h2>
+
+#if( $auth.hasAccess( "dhis-web-reports", "reportManagement") )
+    <ul>
+        <li>Report Management</li>
+        <ul>
+            <li><a href = "reportManagement.action">Report Management</a></li>
+        </ul>
+    </ul>
+#end
+
+<ul>
+	<li>Report Analysis</li>
+	<ul>
+		#if( $auth.hasAccess( "dhis-web-reports", "hmisReportAnalyser") )
+			<li><a href = "hmisReportAnalyser.action">$i18n.getString( "hmis_uphmis_report" )</a></li>
+		#end
+		
+		#if( $auth.hasAccess( "dhis-web-reports", "bulkHMISReportAnalyser") )
+			<li><a href = "bulkHMISReportAnalyser.action">$i18n.getString( "bulk_report" )</a></li>
+		#end			
+	</ul>
+</ul>

@@ -1,0 +1,54 @@
+<!-- for download dataSet Report as dataEntry Screen to excel -->
+<script type="text/javascript">
+
+	function exportCustumDataSetReportToWorkBook()
+	{			    
+	    document.getElementById('htmlCode').value = document.getElementById('formResult').innerHTML;			    			
+	    return true;
+	}
+
+
+(function(){
+    setTimeout(function(){ document.getElementById("excel").style.display="none";
+	document.getElementById("pdf").style.display="none"; }, 1000);
+})();
+
+</script>
+
+<form id="form" name="form" action="exportToExcel.action" method="post" onsubmit="exportCustumDataSetReportToWorkBook()" target="_newtab">
+	<input type="hidden" name="htmlCode" id="htmlCode" />
+	<input type="hidden" name="reportName" id="reportName" value="$encoder.htmlEncode( $selectedOrgunit.name )-$format.formatPeriod( $selectedPeriod )"/>
+	<div id="export">
+		<table> 
+			<tr>
+				<td colspan="2" style="height:5px"></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="submit" value="$i18n.getString( 'get_report_as_workbook' )" style="width:140px;>
+				</td>	
+			</tr>
+		</table>
+	</div>
+
+	#parse( "dhis-web-reporting/renderDataSetReportHeader.vm" )
+
+	<div id="formResult">
+		#set( $css = "cde cde-$!{selectedDataSet.dataEntryForm.style}" )
+		<div class="${css}">
+			<h3>$encoder.htmlEncode( $selectedOrgunit.name ) - $format.formatPeriod( $selectedPeriod )</h3>
+				$customDataEntryFormCode
+		</div>
+	</div>
+</form>
+<!-- old code -->
+<!--
+#parse( "dhis-web-reporting/renderDataSetReportHeader.vm" )
+
+#set( $css = "cde cde-$!{selectedDataSet.dataEntryForm.style}" )
+<div class="${css}">
+	$customDataEntryFormCode
+</div>
+-->
+
+

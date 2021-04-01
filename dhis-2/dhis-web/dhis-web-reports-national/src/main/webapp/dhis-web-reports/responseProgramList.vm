@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<programList>
+    #foreach( $program in $programList )
+    	<program>
+        	<id>$program.id</id>
+        	<name>$program.name</name>
+			<ouName>$encoder.xmlEncode( $ouName )</ouName>
+    	</program>
+    #end
+</programList>
